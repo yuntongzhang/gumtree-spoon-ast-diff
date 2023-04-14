@@ -3,6 +3,8 @@ package gumtree.spoon.diff.operations;
 import com.github.gumtreediff.actions.model.Action;
 import com.github.gumtreediff.actions.model.Move;
 import com.github.gumtreediff.actions.model.Update;
+import com.github.gumtreediff.actions.model.Delete;
+import com.github.gumtreediff.actions.model.Insert;
 
 import gumtree.spoon.builder.SpoonGumTreeBuilder;
 import spoon.reflect.cu.position.NoSourcePosition;
@@ -92,6 +94,20 @@ public abstract class Operation<T extends Action> {
 		for (String s : split) {
 			stringBuilder.append("\t").append(s).append(newline);
 		}
+
+		stringBuilder.append("Cost:");
+
+		int cost = -1;
+
+		if (action instanceof Update) {
+			cost = 1;
+		}
+		if (action instanceof Move || action instanceof Insert || action instanceof Delete) {
+			cost = action.getNode().getMetrics().size;
+		}
+
+		stringBuilder.append(cost).append(newline);
+
 		return stringBuilder.toString();
 	}
 
